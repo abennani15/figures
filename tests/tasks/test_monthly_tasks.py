@@ -82,10 +82,10 @@ def test_run_figures_monthly_metrics_with_faked_subtask(transactional_db, monkey
     assert expected_sites.count()
     sites_visited = []
 
-    def fake_populate_monthly_metrics_for_site(site_id):
+    def fake_populate_monthly_metrics_for_site(site_id, queue):
         sites_visited.append(site_id)
 
-    monkeypatch.setattr('figures.tasks.populate_monthly_metrics_for_site.delay',
+    monkeypatch.setattr('figures.tasks.populate_monthly_metrics_for_site.apply_async',
                         fake_populate_monthly_metrics_for_site)
 
     run_figures_monthly_metrics()

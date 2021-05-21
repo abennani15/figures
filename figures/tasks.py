@@ -380,4 +380,7 @@ def run_figures_monthly_metrics():
     """
     logger.info('Starting figures.tasks.run_figures_monthly_metrics...')
     for site in get_sites():
-        populate_monthly_metrics_for_site.delay(site_id=site.id)
+        populate_monthly_metrics_for_site.apply_async(
+            site.id,
+            queue='edx.lms.core.high'
+            )

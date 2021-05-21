@@ -39,6 +39,12 @@ def update_celerybeat_schedule(celerybeat_schedule_settings, figures_env_tokens)
                 hour=figures_env_tokens.get('DAILY_METRICS_IMPORT_HOUR', 2),
                 minute=figures_env_tokens.get('DAILY_METRICS_IMPORT_MINUTE', 0),
                 ),
+            'options': {
+                'queue': figures_env_tokens.get(
+                    'DAILY_METRICS_IMPORT_QUEUE',
+                    'edx.lms.core.high'
+                    )
+                },
             }
 
     if figures_env_tokens.get('ENABLE_DAILY_MAU_IMPORT', False):
@@ -48,12 +54,24 @@ def update_celerybeat_schedule(celerybeat_schedule_settings, figures_env_tokens)
                 hour=figures_env_tokens.get('DAILY_MAU_IMPORT_HOUR', 0),
                 minute=figures_env_tokens.get('DAILY_MAU_IMPORT_MINUTE', 0),
                 ),
+            'options': {
+                'queue': figures_env_tokens.get(
+                    'DAILY_MAU_IMPORT_QUEUE',
+                    'edx.lms.core.high'
+                    )
+                },
             }
 
     if figures_env_tokens.get('ENABLE_FIGURES_MONTHLY_METRICS', True):
         celerybeat_schedule_settings['figures-monthly-metrics'] = {
             'task': 'figures.tasks.run_figures_monthly_metrics',
             'schedule': crontab(0, 0, day_of_month=1),
+            'options': {
+                'queue': figures_env_tokens.get(
+                    'FIGURES_MONTHLY_METRICS_QUEUE',
+                    'edx.lms.core.high'
+                    )
+                },
             }
 
 
